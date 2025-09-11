@@ -1,0 +1,172 @@
+{
+  "preprocessing_pipeline": {
+    "description": "Configuration for the preprocessing pipeline of MultiWOZ v2.2, PersonaChat, and Synthetic Conversations datasets",
+    "version": "1.0.0",
+    "data_directories": {
+      "raw_data": "data/raw",
+      "synthetic_data": "data/synthetic", 
+      "processed_data": "data/processed",
+      "output_data": "data/processed"
+    },
+    "datasets": {
+      "multiwoz_v22": {
+        "enabled": true,
+        "path": "data/raw/multi_woz_v22",
+        "splits": ["train", "validation", "test"],
+        "description": "Multi-domain task-oriented dialogues",
+        "processing_options": {
+          "extract_dialogue_states": true,
+          "normalize_slot_values": true,
+          "map_intents": true,
+          "extract_entities": true
+        }
+      },
+      "personachat": {
+        "enabled": true,
+        "path": "data/raw/personachat",
+        "splits": ["train", "validation"],
+        "description": "Persona-based conversational dialogues",
+        "processing_options": {
+          "extract_personality_traits": true,
+          "map_intents": true,
+          "extract_entities": true,
+          "calculate_persona_confidence": true,
+          "max_samples_per_split": 10000
+        }
+      },
+      "synthetic_conversations": {
+        "enabled": true,
+        "path": "data/synthetic/synthetic_conversations_20250910_173808.csv",
+        "description": "Synthetic agent-customer conversations",
+        "processing_options": {
+          "extract_intents": true,
+          "extract_entities": true,
+          "use_confidence_scores": true,
+          "validate_templates": true
+        }
+      }
+    },
+    "text_processing": {
+      "normalization": {
+        "lowercase": true,
+        "remove_extra_whitespace": true,
+        "remove_excessive_punctuation": true,
+        "clean_special_characters": true
+      },
+      "entity_extraction": {
+        "extract_emails": true,
+        "extract_phone_numbers": true,
+        "extract_order_numbers": true,
+        "extract_amounts": true,
+        "extract_persona_traits": true
+      }
+    },
+    "output_formats": {
+      "json": {
+        "enabled": true,
+        "description": "JSON format for general use and analysis"
+      },
+      "csv": {
+        "enabled": true,
+        "description": "CSV format for Excel and basic analysis"
+      },
+      "parquet": {
+        "enabled": true,
+        "description": "Parquet format for Tableau, Power BI, and data science"
+      }
+    },
+    "validation": {
+      "validate_dialogues": true,
+      "validate_turns": true,
+      "check_data_quality": true,
+      "generate_statistics": true,
+      "save_validation_reports": true
+    },
+    "training_splits": {
+      "create_splits": false,
+      "train_ratio": 0.7,
+      "validation_ratio": 0.15,
+      "test_ratio": 0.15,
+      "shuffle_data": true,
+      "stratify_by_intent": false
+    },
+    "logging": {
+      "level": "INFO",
+      "save_to_file": true,
+      "log_file": "data/processed/preprocessing.log",
+      "include_timestamps": true
+    },
+    "performance": {
+      "batch_size": 1000,
+      "max_workers": 4,
+      "memory_efficient": true,
+      "progress_reporting": true
+    }
+  },
+  "intent_mappings": {
+    "multiwoz": {
+      "inform": "provide_information",
+      "request": "request_information", 
+      "book": "make_booking",
+      "confirm": "confirm_details",
+      "offer": "offer_options",
+      "select": "select_option",
+      "recommend": "recommend",
+      "bye": "end_conversation",
+      "greet": "greeting",
+      "thank": "thank_you",
+      "welcome": "welcome",
+      "reqmore": "request_more",
+      "nooffer": "no_offer",
+      "nobook": "no_booking"
+    },
+    "personachat": {
+      "question": "ask_question",
+      "answer": "provide_answer",
+      "opinion": "share_opinion",
+      "fact": "share_fact",
+      "preference": "share_preference",
+      "experience": "share_experience",
+      "greeting": "greeting",
+      "goodbye": "end_conversation",
+      "agreement": "agree",
+      "disagreement": "disagree",
+      "clarification": "request_clarification"
+    },
+    "synthetic": {
+      "problem_report": "report_issue",
+      "acknowledge": "acknowledge_issue",
+      "gather_info": "collect_information",
+      "provide_info": "provide_information",
+      "solution_offer": "offer_solution",
+      "confirmation": "confirm_details",
+      "booking_request": "request_booking",
+      "payment_issue": "payment_problem",
+      "product_inquiry": "product_question",
+      "complaint": "customer_complaint",
+      "satisfaction": "satisfaction_check",
+      "escalation": "escalate_issue",
+      "resolution": "resolve_issue",
+      "follow_up": "follow_up",
+      "thank_you": "thank_customer"
+    }
+  },
+  "domain_mappings": {
+    "multiwoz": {
+      "restaurant": "restaurant",
+      "hotel": "hotel",
+      "attraction": "attraction", 
+      "train": "transportation",
+      "taxi": "transportation",
+      "bus": "transportation",
+      "police": "service",
+      "hospital": "service"
+    },
+    "synthetic": {
+      "customer_support": "customer_service",
+      "booking_reservation": "booking",
+      "payment_billing": "payment",
+      "product_inquiry": "product"
+    }
+  }
+}

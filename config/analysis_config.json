@@ -1,0 +1,127 @@
+{
+  "agent_performance_analysis": {
+    "description": "Configuration for agent performance analysis and baseline metrics generation",
+    "version": "1.0.0",
+    "input_formats": {
+      "json": {
+        "description": "JSON format with conversation objects",
+        "required_fields": ["dialogue_id", "turns"],
+        "optional_fields": ["domain", "intent_type", "metadata"]
+      },
+      "csv": {
+        "description": "CSV format with turn-level data",
+        "required_fields": ["dialogue_id", "turn_id", "speaker", "utterance"],
+        "optional_fields": ["intent", "confidence", "entities", "domain", "intent_type"]
+      }
+    },
+    "metrics": {
+      "intent_accuracy": {
+        "enabled": true,
+        "description": "Percentage of correctly identified intents",
+        "calculation_method": "ground_truth_comparison"
+      },
+      "confidence_scores": {
+        "enabled": true,
+        "description": "Analysis of confidence score distribution and quality",
+        "thresholds": {
+          "high_confidence": 0.8,
+          "medium_confidence": 0.5,
+          "low_confidence": 0.0
+        }
+      },
+      "success_rate": {
+        "enabled": true,
+        "description": "Percentage of successful conversations",
+        "success_criteria": {
+          "min_turns": 2,
+          "success_intents": ["end_conversation", "thank_customer", "resolve_issue"],
+          "confidence_threshold": 0.8
+        }
+      },
+      "response_time": {
+        "enabled": true,
+        "description": "Average response time analysis",
+        "calculation_method": "timestamp_difference"
+      },
+      "error_rate": {
+        "enabled": true,
+        "description": "Frequency of errors or fallback responses",
+        "error_indicators": {
+          "low_confidence_threshold": 0.3,
+          "fallback_intents": ["fallback", "error", "unknown"]
+        }
+      },
+      "intent_distribution": {
+        "enabled": true,
+        "description": "Distribution of intent types across conversations",
+        "top_n_intents": 10
+      },
+      "domain_performance": {
+        "enabled": true,
+        "description": "Performance metrics broken down by domain",
+        "supported_domains": ["customer_service", "booking", "payment", "product"]
+      },
+      "temporal_metrics": {
+        "enabled": true,
+        "description": "Time-based performance analysis",
+        "metrics": ["conversation_length", "turn_frequency", "peak_performance_hours"]
+      }
+    },
+    "output_formats": {
+      "tableau_csv": {
+        "enabled": true,
+        "description": "CSV format optimized for Tableau visualization",
+        "structure": "metric_name, metric_value, metric_category, domain, intent_type"
+      },
+      "json_report": {
+        "enabled": true,
+        "description": "Comprehensive JSON report with all metrics",
+        "include_raw_data": false
+      },
+      "summary_report": {
+        "enabled": true,
+        "description": "Human-readable summary report",
+        "format": "text"
+      }
+    },
+    "performance_grading": {
+      "enabled": true,
+      "criteria": {
+        "intent_accuracy_weight": 0.4,
+        "success_rate_weight": 0.3,
+        "confidence_weight": 0.2,
+        "error_rate_weight": 0.1
+      },
+      "grade_thresholds": {
+        "A": 90,
+        "B": 80,
+        "C": 70,
+        "D": 60,
+        "F": 0
+      }
+    },
+    "filtering": {
+      "min_conversation_length": 1,
+      "min_turns_per_conversation": 1,
+      "exclude_empty_utterances": true,
+      "exclude_low_confidence_turns": false,
+      "confidence_threshold": 0.0
+    },
+    "comparative_analysis": {
+      "enabled": true,
+      "ranking_metrics": [
+        "intent_accuracy",
+        "confidence",
+        "success_rate",
+        "lowest_error_rate"
+      ],
+      "generate_insights": true
+    },
+    "logging": {
+      "level": "INFO",
+      "save_to_file": true,
+      "log_file": "outputs/analysis/agent_analysis.log",
+      "include_timestamps": true
+    }
+  }
+}
